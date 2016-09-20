@@ -1,9 +1,8 @@
 from globals import *
-from enum import Enum, unique
+from enum import Enum
 import random
 from numpy.random import choice
 
-@unique
 class PokemonType(Enum):
      NA= 0,
      STEEL = 1,
@@ -573,7 +572,7 @@ common_pokemon =[
     [0.004, PokemonData(148, 'dragonair', PokemonType.DRAGON, PokemonType.NA)],
     [0.003, PokemonData(149, 'dragonite', PokemonType.DRAGON, PokemonType.FLYING)],
 ]
-legendery_pokemon_chance = 0.001
+legendery_pokemon_chance = 0.01
 legendery_pokemon = [
     [0.08, PokemonData(144, 'articuno', PokemonType.ICE, PokemonType.FLYING)],
     [0.07, PokemonData(145, 'zapdos', PokemonType.ELECTRIC, PokemonType.FLYING)],

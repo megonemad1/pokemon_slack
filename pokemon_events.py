@@ -1,10 +1,9 @@
 from globals import *
-from enum import Enum, unique
+from enum import Enum
 from pokemon_list import PokemonEgg, get_random_pokemon
 import random
+import string
 
-
-@unique
 class EventType(Enum):
     pokemon = 0
     egg = 1
@@ -14,6 +13,8 @@ class EventData(object):
     def __init__(self, event_type, data):
         self.event_type = event_type
         self.data = data
+def get_cap(n):
+    return ''.join(random.choice(string.ascii_uppercase + string.digits) for _ in range(n))
 
 def event_wild_pokemon():
     global current_events
@@ -23,7 +24,7 @@ def event_wild_pokemon():
         if current_event:
                 print(current_event.__dict__)
                 if current_event.event_type == EventType.pokemon:
-                    poke = current_event.data
+                    c, poke = current_event.data
                     send_message(channel, "wild :{0}: ran away".format(poke.name))
                     current_events[channel] = None
                 else:
@@ -31,8 +32,9 @@ def event_wild_pokemon():
 
         else:
             poke = get_random_pokemon()
-            send_message(channel, "wild pokemon appeared :{0}:".format(poke.name))
-            current_events[channel] = EventData(EventType.pokemon,poke)
+            cap = get_cap(5)
+            send_message(channel, "wild pokemon appeared :{0}: capture code {1}".format(poke.name,cap))
+            current_events[channel] = EventData(EventType.pokemon,(cap, poke))
     else:
         print("no channels")
 
@@ -49,7 +51,7 @@ def event_find_egg():
                 print("not a egg_event")
         else:
             send_message(channel, "you see an egg on the floor")
-            current_events[channel] = EventData(EventType.egg, PokemonEgg(get_random_pokemon(),random.randint(5000,10000)))
+            current_events[channel] = EventData(EventType.egg, PokemonEgg(get_random_pokemon(),random.randint(50,100)))
     else:
         print("no channels")
 

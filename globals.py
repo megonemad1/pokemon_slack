@@ -16,7 +16,7 @@ local_lock = object()
 cmdkey = "*"
 userlist = {}
 alowed_channel = []
-random_event_chance = 0.00026
+random_event_chance = 0.005
 current_events = {}
 pokedex = {}
 egg_steps = {}
@@ -70,7 +70,7 @@ def get_user_id(name):
                 if 'id' in user:
                     userlist[str(user["name"])] = str(user["id"])
             for _id in userlist.keys():
-                if str(_id) in name:
+                if str(_id) in name or str(_id).upper() in name:
                     return userlist.get(_id)
             raise ValueError("incorrect id user {} not found in {}".format(name,userlist.keys()))
         else:

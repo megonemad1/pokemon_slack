@@ -41,10 +41,15 @@ def command_catch(channel, userid, args):
     global current_events
     if current_events.get(channel):    
         c_event = current_events[channel].event_type
-        _pokemon = current_events[channel].data
-        if c_event == EventType.pokemon:
-            current_events[channel] = None
-            return "{}:{}: was caught".format(*add_pokemon(_pokemon, userid))
+        cap, _pokemon = current_events[channel].data
+        print(cap)
+        print(args)
+	if len(args) >=1 and cap == args[0].upper():
+            if c_event == EventType.pokemon:
+                current_events[channel] = None
+                return "{1}:{2}: was caught by {0}".format(get_user_name(userid), *add_pokemon(_pokemon, userid))
+        else:
+            return "capture dosnt match"
     return "no pokemon to catch"
 
 
@@ -73,27 +78,32 @@ def command_grab(channel, userid, args):
     return "no pokemon to catch"
 def command_steps(channel, userid, args):
     global local_lock, player_eggs, egg_steps
-    steps, lock = args
-    if local_lock is lock:
-        if userid in egg_steps.keys():
-            egg_steps[userid]+=steps
-        else:
-            egg_steps[userid]=steps
-        player_steps = egg_steps.get(userid)
-        egg = player_eggs.get(userid)
-        if egg and player_steps:
-            if egg.steps < player_steps:
-                _pokemon = egg.pokemon
-                player_eggs[userid] = None
-                return "{1}:{2}: Hatched From {0}'s egg".format(get_user_name(userid), *add_pokemon(_pokemon, userid))
-    else:
-        print("illegal use of steps command by {}\n{}".format(get_user_name(userid), args, local_lock))
-    return None
+    try:
+        steps, lock = args
+        if local_lock is lock:
+            if userid in egg_steps.keys():
+                egg_steps[userid]+=steps
+            else:
+                egg_steps[userid]=steps
+            player_steps = egg_steps.get(userid)
+            egg = player_eggs.get(userid)
+            if egg and player_steps:
+                if egg.steps < player_steps:
+                    _pokemon = egg.pokemon
+                    player_eggs[userid] = None
+                    return "{1}:{2}: Hatched From {0}'s egg".format(get_user_name(userid), *add_pokemon(_pokemon, userid))
+    except Exception:
+        steps= egg_steps.get(userid)
+        if steps:
+            return "total: {}".format(steps)
 
 def command_add(channel, userid, args):
-    alowed_channel.append(channel)
-    current_events[channel] = None
-    return "putting out poke'blocks"
+    if channel not in alowed_channel:
+        alowed_channel.append(channel)
+        current_events[channel] = None
+        return "putting out poke'blocks"
+    else:
+        return "the pokemon are here what more do you want from me!"
 
 def command_remove(channel, userid, args):
     alowed_channel.remove(channel)
@@ -101,8 +111,7 @@ def command_remove(channel, userid, args):
     return "spraying repels"
 
 def command_info(channel, userid, args):
-    return "{0}:{1} comand:info args:{2} channel{3}".format(
-        get_user_name(userid), userid, args, channel)
+    return "prefix the folowing command s with *\n"+"\n".join(commands.keys())
 
 def command_trade(channel, userid, args):
     global pokedex, player_trade_requests
@@ -148,56 +157,62 @@ def command_trade(channel, userid, args):
 
 def command_resolve_trade(channel, userid, args):
     global pokedex, player_trade_requests
-    if len(args) == 2:
-        my_dex=pokedex.get(userid)
-        person, result = args
-        person = get_user_id(person)
-        requests = player_trade_requests.get(userid)  
-        if result == "accept":
-            print("accept")
-            print(player_trade_requests)
-            print(person)
-            if requests:
-                request = requests.get(person)
-                if request:
-                    print(request)
-                    poke_offer,other_userid,poke_request = request
-                    other_dex = pokedex.get(other_userid)
-                    poke_offers_bag = Counter(poke_offer)
-                    poke_request_bag = Counter(poke_request)
-                    if other_dex:
+    try:
+        if len(args) == 2:
+            my_dex=pokedex.get(userid)
+            person, result = args
+            try:
+                person = get_user_id(person)
+            except ValueError:
+                return "{} is not a person".format(person)
+            requests = player_trade_requests.get(userid)  
+            if result == "accept":
+                print("accept")
+                print(player_trade_requests)
+                print(person)
+                if requests:
+                    request = requests.get(person)
+                    if request:
+                        print(request)
+                        poke_offer,other_userid,poke_request = request
+                        other_dex = pokedex.get(other_userid)
+                        poke_offers_bag = Counter(poke_offer)
+                        poke_request_bag = Counter(poke_request)
+                        if other_dex:
+                            for o,c in poke_offers_bag.items():
+                                p = other_dex.get(o)
+                                if not p or p<c:
+                                    return "the trade is no longer valid"
+                        my_dex = pokedex.get(userid)
+                        if my_dex:
+                            for o,c in poke_request_bag.items():
+                                p = my_dex.get(o)
+                                if not p or p<c:
+                                    return "the trade is no longer valid"
                         for o,c in poke_offers_bag.items():
-                            p = other_dex.get(o)
-                            if not p or p<c:
-                                return "the trade is no longer valid"
-                    my_dex = pokedex.get(userid)
-                    if my_dex:
+                            other_dex[o]-=c
+                            if o in my_dex.keys():
+                                my_dex[o] += c
+                            else:
+                                my_dex[o] = c
                         for o,c in poke_request_bag.items():
-                            p = my_dex.get(o)
-                            if not p or p<c:
-                                return "the trade is no longer valid"
-                    for o,c in poke_offers_bag.items():
-                        other_dex[o]-=c
-                        if o in my_dex.keys():
-                            my_dex[o] += c
-                        else:
-                            my_dex[o] = c
-                    for o,c in poke_request_bag.items():
-                        my_dex[o]-=c
-                        if o in other_dex.keys():
-                            other_dex[o] += c
-                        else:
-                            other_dex[o] = c
-                    return "trade complete"
-        elif result == "decline":
-            requests[userid] = None
+                            my_dex[o]-=c
+                            if o in other_dex.keys():
+                                other_dex[o] += c
+                            else:
+                                other_dex[o] = c
+                        return "trade complete"
+            elif result == "decline":
+                requests[userid] = None
+    except Exception:
+        return "usage: *trade @person [accept/decline]"
                 
 def command_save(channel, userid, args):
     with open('userlist.pickle', 'w') as f:
         pickle.dump(userlist, f)
 
-    #with open('alowed_channel.pickle', 'w') as f:
-    #    pickle.dump(alowed_channel, f)
+    with open('alowed_channel.pickle', 'w') as f:
+        pickle.dump(alowed_channel, f)
 
     with open('random_event_chance.pickle', 'w') as f:
         pickle.dump(random_event_chance, f)
@@ -227,12 +242,12 @@ def command_load(channel, userid, args):
     #            userlist = pickle.load(f)
     #    else:
     #        print("no file " + fname)
-    #    fname='alowed_channel.pickle'
-    #    if os.path.isfile(fname):
-    #        with open(fname) as f:
-    #            alowed_channel = pickle.load(f)
-    #    else:
-    #        print("no file " + fname)
+        fname='alowed_channel.pickle'
+        if os.path.isfile(fname):
+            with open(fname) as f:
+                alowed_channel += [x for x in pickle.load(f) if x not in alowed_channel]
+        else:
+            print("no file " + fname)
     #    fname='random_event_chance.pickle'
     #    if os.path.isfile(fname):
     #        with open(fname) as f:
@@ -274,4 +289,18 @@ def command_load(channel, userid, args):
     print("loaded")
 
 
-commands = {"save": command_save, "load": command_load, "trade": command_resolve_trade, "mktrade": command_trade, "grab": command_grab,"info": command_info, "add": command_add, "remove": command_remove, "steps": command_steps, "catch": command_catch, "pokedex":command_pokedex}
+def command_set_encounter(channel, userid, args):
+    global random_event_chance
+    if len(args)>=1:
+        try:
+            newval=float(str(args[0]))
+        except Exception as e:
+            print(args)
+            print(e)
+            return "the new value should be 0<x<=1"
+        if newval > 0 and newval <=1:
+            random_event_chance=newval 
+    return "the new value should be 0<x<=1"
+    
+
+commands = {"set_encounter_rate": command_set_encounter, "save": command_save, "load": command_load, "trade": command_resolve_trade, "mktrade": command_trade, "grab": command_grab,"info": command_info, "add": command_add, "remove": command_remove, "steps": command_steps, "catch": command_catch, "pokedex":command_pokedex}

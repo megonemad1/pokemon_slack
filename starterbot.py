@@ -89,6 +89,11 @@ if __name__ == "__main__":
             if save:
                 save(None, None, None)
             raise e
+        except KeyboardInterrupt as e:
+            save = commands.get("save")
+            if save:
+                save(None, None, None)
+            raise e
 
     else:
         print("Connection failed. Invalid Slack token or bot ID?")
