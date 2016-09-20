@@ -18,8 +18,8 @@ class EventData(object):
 def event_wild_pokemon():
     global current_events
     if alowed_channel:
-        channel = random.choice(alowed_channel) 
-        current_event = current_events.get(channel)       
+        channel = random.choice(alowed_channel)
+        current_event = current_events.get(channel)
         if current_event:
                 print(current_event.__dict__)
                 if current_event.event_type == EventType.pokemon:
@@ -31,7 +31,7 @@ def event_wild_pokemon():
 
         else:
             poke = get_random_pokemon()
-            send_message(channel, "wild pokemon appeard :{0}:".format(poke.name))
+            send_message(channel, "wild pokemon appeared :{0}:".format(poke.name))
             current_events[channel] = EventData(EventType.pokemon,poke)
     else:
         print("no channels")
@@ -39,8 +39,8 @@ def event_wild_pokemon():
 def event_find_egg():
     global current_events
     if alowed_channel:
-        channel = random.choice(alowed_channel) 
-        current_event = current_events.get(channel)       
+        channel = random.choice(alowed_channel)
+        current_event = current_events.get(channel)
         if current_event:
             if current_event.event_type == EventType.egg:
                 send_message(channel, "you leave the egg behind")
