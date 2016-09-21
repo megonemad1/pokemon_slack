@@ -246,6 +246,10 @@ def command_load(channel, userid, args):
                 userlist.update(pickle.load(f))
         else:
             print("no file " + fname)
+    except Exception as e:
+        print(e)
+        
+    try:            
         fname='alowed_channel.pickle'
         if os.path.isfile(fname):
             with open(fname) as f:
@@ -253,42 +257,70 @@ def command_load(channel, userid, args):
                 print(alowed_channel)
         else:
             print("no file " + fname)
+    except Exception as e:
+        print(e)
+        
+    try:  
         fname='value_set.pickle'
         if os.path.isfile(fname):
             with open(fname) as f:
                 value_set.update(pickle.load(f))
         else:
             print("no file " + fname)
+    except Exception as e:
+        print(e)
+        
+    try:  
         fname='current_events.pickle'
         if os.path.isfile(fname):
             with open(fname) as f:
                 current_events.update(pickle.load(f))
         else:
             print("no file " + fname)
+    except Exception as e:
+        print(e)
+        
+    try:  
         fname='pokedex.pickle'
         if os.path.isfile(fname):
             with open(fname) as f:
                 pokedex.update(pickle.load(f))
         else:
             print("no file " + fname)
+    except Exception as e:
+        print(e)
+        
+    try:  
         fname='egg_steps.pickle'
         if os.path.isfile(fname):
             with open(fname) as f:
                 egg_steps.update(pickle.load(f))
         else:
             print("no file " + fname)
+    except Exception as e:
+        print(e)
+        
+    try:  
         fname='player_eggs.pickle'
         if os.path.isfile(fname):
             with open(fname) as f:
                 player_eggs.update(pickle.load(f))
         else:
             print("no file " + fname)
+    except Exception as e:
+        print(e)
+        
+    try:  
         fname='player_trade_requests.pickle'
         if os.path.isfile(fname):
             with open(fname) as f:
                 player_trade_requests.update(pickle.load(f))
         else:
             print("no file " + fname)
+    except Exception as e:
+        print(e)
+        
+    try:  
         fname = "player_combattents.pickle"
         if os.path.isfile(fname):
             with open(fname) as f:
