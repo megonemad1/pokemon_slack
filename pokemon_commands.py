@@ -238,7 +238,7 @@ def command_save(channel, userid, args):
     print("saved")
 
 def command_load(channel, userid, args):
-    global player_trade_requests, player_eggs, egg_steps, pokedex, current_events, random_event_chance, alowed_channel, userlist, player_combattents
+    global value_set, player_trade_requests, player_eggs, egg_steps, pokedex, current_events, alowed_channel, userlist, player_combattents
     try:
         fname='userlist.pickle'
         if os.path.isfile(fname):
