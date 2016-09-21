@@ -71,7 +71,7 @@ def get_user_id(name):
                 if 'id' in user:
                     userlist[str(user["name"])] = str(user["id"])
             for _id in userlist.keys():
-                if str(_id) in name or str(_id).upper() in name:
+                if str(_id).upper() in name or str(_id).lower() in name:
                     return userlist.get(_id)
             raise ValueError("incorrect id user {} not found in {}".format(name,userlist.keys()))
         else:
