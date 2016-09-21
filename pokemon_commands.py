@@ -290,7 +290,7 @@ def command_load(channel, userid, args):
 
 
 def command_set_encounter(channel, userid, args):
-    global random_event_chance
+    global value_set
     if len(args)>=1:
         try:
             newval=float(str(args[0]))
@@ -299,8 +299,10 @@ def command_set_encounter(channel, userid, args):
             print(e)
             return "the new value should be 0<x<=1"
         if newval > 0 and newval <=1:
-            random_event_chance=newval 
-    return "the new value should be 0<x<=1"
+            oldval= value_set.get("random_event_chance")
+            value_set["random_event_chance"]=newval 
+            return "{} set to {}".format(oldval, newval)
+    return "you need a float param"
     
 
 commands = {"set_encounter_rate": command_set_encounter, "save": command_save, "load": command_load, "trade": command_resolve_trade, "mktrade": command_trade, "grab": command_grab,"info": command_info, "add": command_add, "remove": command_remove, "steps": command_steps, "catch": command_catch, "pokedex":command_pokedex}

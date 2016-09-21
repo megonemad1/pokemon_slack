@@ -57,7 +57,9 @@ def parse_slack_output(slack_rtm_output):
 
 
 def random_events():
-    if random.random() < random_event_chance:
+    global value_set
+    random_chance = value_set.get("random_event_chance")
+    if random_chance and random.random() < random_chance:
         probability_distribution, list_of_candidates = map(list, zip(*events))
         total_p = sum(probability_distribution)
         probability_distribution = [float(x)/total_p for x in probability_distribution]
