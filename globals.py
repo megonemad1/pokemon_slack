@@ -21,6 +21,7 @@ current_events = {}
 pokedex = {}
 egg_steps = {}
 player_eggs = {}
+player_combattents = {}
 player_trade_requests = {}
 
 class ConnectionError(Exception):

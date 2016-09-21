@@ -214,8 +214,8 @@ def command_save(channel, userid, args):
     with open('alowed_channel.pickle', 'w') as f:
         pickle.dump(alowed_channel, f)
 
-    with open('random_event_chance.pickle', 'w') as f:
-        pickle.dump(random_event_chance, f)
+    with open('value_set.pickle', 'w') as f:
+        pickle.dump(value_set, f)
 
     with open('current_events.pickle', 'w') as f:
         pickle.dump(current_events, f)
@@ -231,29 +231,34 @@ def command_save(channel, userid, args):
 
     with open('player_trade_requests.pickle', 'w') as f:
         pickle.dump(player_trade_requests, f)
+
+    with open('player_combattents.pickle', 'w') as f:
+        pickle.dump(player_combattents, f)
+        
     print("saved")
 
 def command_load(channel, userid, args):
-    global player_trade_requests, player_eggs, egg_steps, pokedex, current_events, random_event_chance, alowed_channel, userlist
+    global player_trade_requests, player_eggs, egg_steps, pokedex, current_events, random_event_chance, alowed_channel, userlist, player_combattents
     try:
-    #    fname='userlist.pickle'
-    #    if os.path.isfile(fname):
-    #        with open(fname) as f:
-    #            userlist = pickle.load(f)
-    #    else:
-    #        print("no file " + fname)
+        fname='userlist.pickle'
+        if os.path.isfile(fname):
+            with open(fname) as f:
+                userlist.update(pickle.load(f))
+        else:
+            print("no file " + fname)
         fname='alowed_channel.pickle'
         if os.path.isfile(fname):
             with open(fname) as f:
                 alowed_channel += [x for x in pickle.load(f) if x not in alowed_channel]
+                print(alowed_channel)
         else:
             print("no file " + fname)
-    #    fname='random_event_chance.pickle'
-    #    if os.path.isfile(fname):
-    #        with open(fname) as f:
-    #            random_event_chance = pickle.load(f)
-    #    else:
-    #        print("no file " + fname)
+        fname='value_set.pickle'
+        if os.path.isfile(fname):
+            with open(fname) as f:
+                value_set.update(pickle.load(f))
+        else:
+            print("no file " + fname)
         fname='current_events.pickle'
         if os.path.isfile(fname):
             with open(fname) as f:
@@ -284,6 +289,12 @@ def command_load(channel, userid, args):
                 player_trade_requests.update(pickle.load(f))
         else:
             print("no file " + fname)
+        fname = "player_combattents.pickle"
+        if os.path.isfile(fname):
+            with open(fname) as f:
+                player_trade_requests.update(pickle.load(f))
+        else:
+            print("no file " + fname)
     except Exception as e:
         print(e)
     print("loaded")
@@ -301,8 +312,17 @@ def command_set_encounter(channel, userid, args):
         if newval > 0 and newval <=1:
             oldval= value_set.get("random_event_chance")
             value_set["random_event_chance"]=newval 
-            return "{} set to {}".format(oldval, newval)
+            return "set encounter rate from {} to {}".format(oldval, newval)
     return "you need a float param"
     
+def command_set_combattent(channel, userid, args):
+    global player_combattents
+    if len(args)>=1:
+        my_dex = pokedex.get(userid)
+        if my_dex:
+            for k,v in my_dex.items():
+                if k.name in args[0] and v>0:
+                    combattent = k
+
 
 commands = {"set_encounter_rate": command_set_encounter, "save": command_save, "load": command_load, "trade": command_resolve_trade, "mktrade": command_trade, "grab": command_grab,"info": command_info, "add": command_add, "remove": command_remove, "steps": command_steps, "catch": command_catch, "pokedex":command_pokedex}
