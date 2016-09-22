@@ -1,6 +1,6 @@
 from globals import *
 from pokemon_events import EventType
-from pokemon_list import legendery_pokemon, common_pokemon
+from pokemon_list import legendery_pokemon, common_pokemon, resolve_damage
 from collections import Counter
 import pickle
 import re   
@@ -355,6 +355,36 @@ def command_set_combattent(channel, userid, args):
             for k,v in my_dex.items():
                 if k.name in args[0] and v>0:
                     combattent = k
+                    return ":{}: is ready for battle".format(k.name)
+                else
+                    return "you dont have that pokemon"
 
+def command_challange(channel, userid, args):
+    global player_combattents
+    if len(args)>=1:
+        try:
+            oponent = get_user_id(args[0])
+        except ValueError:
+            return "{} is not recognised".format(args[0])
+        oponent_pokemon = player_combattents.get(oponent):
+        my_pokemon = player_combattents.get(userid):
+        if oponent_pokemon and my_pokemon:
+            my_health = 20
+            oponent_helth = 20
+            while my_health>0 and oponent_helth>0:
+                oponent_helth -= resolve_damage(my_pokemon, oponent_pokemon)
+                my_helth -= resolve_damage(oponent_pokemon, my_pokemon)
+            if my_health<=0 and oponent_helth<=0:
+                return "draw"
+            else:
+                if my_health<=0:
+                    return "chalenger lost"
+                if oponent_helth <=0:
+                    return "chalenger won"
+            print("err no one won")
+        else:
+            return "you both need to ready a pokemon"
 
-commands = {"set_encounter_rate": command_set_encounter, "save": command_save, "load": command_load, "trade": command_resolve_trade, "mktrade": command_trade, "grab": command_grab,"info": command_info, "add": command_add, "remove": command_remove, "steps": command_steps, "catch": command_catch, "pokedex":command_pokedex}
+    
+
+commands = {"ready":command_set_combattent,"challenge": command_challange,"set_encounter_rate": command_set_encounter, "save": command_save, "load": command_load, "trade": command_resolve_trade, "mktrade": command_trade, "grab": command_grab,"info": command_info, "add": command_add, "remove": command_remove, "steps": command_steps, "catch": command_catch, "pokedex":command_pokedex}
