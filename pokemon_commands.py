@@ -387,15 +387,15 @@ def command_challange(channel, userid, args):
 
 def command_tackle(channel, userid, args):
     global current_events
-        if current_events.get(channel).event_type == EventType.pokemon:    
-            c_event = current_events[channel].event_type
-            cap, _pokemon = current_events[channel].data
-            if len(args) >=1 and cap == args[0].upper() and random.random() < 0.3:
-                current_events[channel] = None
-                return "{0} used tackle :{1}: was fainted".format(get_user_name(userid), _pokemon.name)
-            else:
-                return "capture dosnt match"
-        return "no pokemon to catch"
+    if current_events.get(channel).event_type == EventType.pokemon:    
+        c_event = current_events[channel].event_type
+        cap, _pokemon = current_events[channel].data
+        if len(args) >=1 and cap == args[0].upper() and random.random() < 0.3:
+            current_events[channel] = None
+            return "{0} used tackle :{1}: was fainted".format(get_user_name(userid), _pokemon.name)
+        else:
+            return "capture dosnt match"
+    return "no pokemon to catch"
 
     
 
