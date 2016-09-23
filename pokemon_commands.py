@@ -364,7 +364,7 @@ def command_challange(channel, userid, args):
     if len(args)>=1:
         try:
             oponent = get_user_id(args[0])
-            oponent_pokemon = player_combattents.get(get_user_id(oponent)):
+            oponent_pokemon = player_combattents.get(get_user_id(oponent))
         except ValueError:
             return "{} is not recognised".format(args[0])
         my_pokemon = player_combattents.get(userid):
