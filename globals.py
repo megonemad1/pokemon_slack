@@ -23,6 +23,7 @@ egg_steps = {}
 player_eggs = {}
 player_combattents = {}
 player_trade_requests = {}
+murder_meater = {}
 
 class ConnectionError(Exception):
     pass

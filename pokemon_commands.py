@@ -386,17 +386,26 @@ def command_challange(channel, userid, args):
             return "you both need to ready a pokemon"
 
 def command_tackle(channel, userid, args):
-    global current_events
+    global current_events, murder_meater
     if current_events.get(channel) and current_events.get(channel).event_type == EventType.pokemon:    
         c_event = current_events[channel].event_type
         cap, _pokemon = current_events[channel].data
         if random.random() < 0.5:
             current_events[channel] = None
+            if murder_meater.get(userid):
+                murder_meater[userid] +=1
+            else:
+                murder_meater[userid] =1
             return "{0} used tackle :{1}: fainted".format(get_user_name(userid), _pokemon.name)
         else:
             return "{0} used tackle :{1}:, {0} missed".format(get_user_name(userid), _pokemon.name)
     return "no pokemon to tackle"
 
-    
+def command_kill_count(channel, userid, args):
+    global murder_meater
+    steps= murder_meater.get(userid)
+        if steps:
+            return "total: {}".format(steps)
 
-commands = {"tackle":command_tackle, "ready":command_set_combattent,"challenge": command_challange,"set_encounter_rate": command_set_encounter, "save": command_save, "load": command_load, "trade": command_resolve_trade, "mktrade": command_trade, "grab": command_grab,"info": command_info, "add": command_add, "remove": command_remove, "steps": command_steps, "catch": command_catch, "pokedex":command_pokedex}
+
+commands = {"killcount": command_kill_count, "tackle":command_tackle, "ready":command_set_combattent,"challenge": command_challange,"set_encounter_rate": command_set_encounter, "save": command_save, "load": command_load, "trade": command_resolve_trade, "mktrade": command_trade, "grab": command_grab,"info": command_info, "add": command_add, "remove": command_remove, "steps": command_steps, "catch": command_catch, "pokedex":command_pokedex}
