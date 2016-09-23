@@ -356,7 +356,7 @@ def command_set_combattent(channel, userid, args):
                 if k.name in args[0] and v>0:
                     combattent = k
                     return ":{}: is ready for battle".format(k.name)
-                else
+                else:
                     return "you dont have that pokemon"
 
 def command_challange(channel, userid, args):
