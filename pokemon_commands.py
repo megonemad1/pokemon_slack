@@ -234,6 +234,9 @@ def command_save(channel, userid, args):
 
     with open('player_combattents.pickle', 'w') as f:
         pickle.dump(player_combattents, f)
+      
+    with open('murder_meater.pickle', 'w') as f:
+        pickle.dump(murder_meater, f)
         
     print("saved")
 
@@ -249,6 +252,16 @@ def command_load(channel, userid, args):
     except Exception as e:
         print(e)
         
+    try:
+        fname='murder_meater.pickle'
+        if os.path.isfile(fname):
+            with open(fname) as f:
+                murder_meater.update(pickle.load(f))
+        else:
+            print("no file " + fname)
+    except Exception as e:
+        print(e)
+
     try:            
         fname='alowed_channel.pickle'
         if os.path.isfile(fname):
