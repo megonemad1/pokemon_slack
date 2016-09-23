@@ -404,8 +404,8 @@ def command_tackle(channel, userid, args):
 def command_kill_count(channel, userid, args):
     global murder_meater
     steps= murder_meater.get(userid)
-        if steps:
-            return "total: {}".format(steps)
+    if steps:
+        return "total: {}".format(steps)
 
 
 commands = {"killcount": command_kill_count, "tackle":command_tackle, "ready":command_set_combattent,"challenge": command_challange,"set_encounter_rate": command_set_encounter, "save": command_save, "load": command_load, "trade": command_resolve_trade, "mktrade": command_trade, "grab": command_grab,"info": command_info, "add": command_add, "remove": command_remove, "steps": command_steps, "catch": command_catch, "pokedex":command_pokedex}
