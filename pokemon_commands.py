@@ -392,7 +392,7 @@ def command_tackle(channel, userid, args):
         cap, _pokemon = current_events[channel].data
         if random.random() < 0.5:
             current_events[channel] = None
-            return "{0} used tackle :{1}: was fainted".format(get_user_name(userid), _pokemon.name)
+            return "{0} used tackle :{1}: fainted".format(get_user_name(userid), _pokemon.name)
         else:
             return "{0} used tackle :{1}:, {0} missed".format(get_user_name(userid), _pokemon.name)
     return "no pokemon to tackle"
