@@ -40,7 +40,7 @@ def add_pokemon(_pokemon, userid):
 
 def command_catch(channel, userid, args):
     global current_events
-    if current_events.get(channel).event_type == EventType.pokemon:    
+    if current_events.get(channel) and current_events.get(channel).event_type == EventType.pokemon:    
         c_event = current_events[channel].event_type
         cap, _pokemon = current_events[channel].data
         print(cap)
@@ -387,7 +387,7 @@ def command_challange(channel, userid, args):
 
 def command_tackle(channel, userid, args):
     global current_events
-    if current_events.get(channel).event_type == EventType.pokemon:    
+    if current_events.get(channel) and current_events.get(channel).event_type == EventType.pokemon:    
         c_event = current_events[channel].event_type
         cap, _pokemon = current_events[channel].data
         if len(args) >=1 and cap == args[0].upper() and random.random() < 0.3:
